@@ -1,0 +1,10 @@
+package br.com.itamarHenrique.alunos;
+
+public class Exemplo1Application {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+	}
+
+}

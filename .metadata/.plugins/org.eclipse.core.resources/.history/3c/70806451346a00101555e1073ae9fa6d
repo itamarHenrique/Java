@@ -1,0 +1,14 @@
+package br.com.itamarHenrique.alunos;
+
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+public class Exemplo1Application {
+
+	
+	@SpringBootApplication
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+	}
+
+}
