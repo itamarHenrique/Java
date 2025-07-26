@@ -1,0 +1,14 @@
+package br.com.itamarHenrique.alunos.entity;
+
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+public class Aluno {
+	
+	private String nome;
+	private String sobrenome;
+	private int matricula;
+	private String curso;
+}
