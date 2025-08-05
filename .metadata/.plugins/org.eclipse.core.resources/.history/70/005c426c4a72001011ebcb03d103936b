@@ -1,0 +1,91 @@
+package br.com.itamarHenrique.alunos.controller;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import org.apache.catalina.connector.Response;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import br.com.itamarHenrique.alunos.entity.Aluno;
+
+@RestController
+@RequestMapping("/api/alunos")
+public class AlunoController {
+
+    private final List<Aluno> listaAlunos = new ArrayList<>();
+    
+    @GetMapping
+    public ReponseEntity<Aluno> obterTodos(){
+
+        return listaAlunos;
+
+    }
+    
+    @PostMapping
+    public ResponseEntity<Aluno> inserir(@RequestBody Aluno aluno){
+
+        listaAlunos.add(aluno);
+        
+        return ResponseEntity.created(null).body(aluno);
+        
+    }
+    
+    @GetMapping("/{matricula}")
+    public ResponseEntity<Aluno> obterAlunoPelaMatricula(@PathVariable int matricula){
+
+        for (Aluno aluno : listaAlunos) {
+            if(aluno.getMatricula() == matricula){
+                return ResponseEntity.ok().body(aluno);
+            }
+        }
+
+        return ResponseEntity.ofNullable(null);
+    }
+    
+    @PutMapping("/{matricula}")
+    public ResponseEntity<Aluno> editarAluno(@PathVariable int matricula, @RequestBody Aluno novosDadosAluno){
+
+        for(Aluno aluno : listaAlunos){
+            if(aluno.getMatricula() == matricula){
+                aluno.setNome(novosDadosAluno.getNome());
+                aluno.setSobrenome(novosDadosAluno.getSobrenome());
+                aluno.setCpf(novosDadosAluno.getCpf());
+                aluno.setMatricula(novosDadosAluno.getMatricula());
+                
+                return ResponseEntity.ok().body(aluno);
+            }
+        }
+		return ResponseEntity.ofNullable(null);
+    }
+    
+    @DeleteMapping("/{matricula}")
+    public void remover(@PathVariable int matricula){
+
+        Iterator<Aluno> iterator = listaAlunos.iterator();
+
+        while(iterator.hasNext()){
+            Aluno aluno = iterator.next();
+            
+            if(aluno.getMatricula() == matricula){
+                iterator.remove();
+                break;
+            }
+        }
+
+    }
+    
+    
+    
+    
+
+    
+}

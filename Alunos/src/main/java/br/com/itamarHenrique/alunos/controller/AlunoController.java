@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.catalina.connector.Response;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,33 +24,35 @@ public class AlunoController {
     private final List<Aluno> listaAlunos = new ArrayList<>();
     
     @GetMapping
-    public List<Aluno> obterTodos(){
+    public ResponseEntity<List<Aluno>> obterTodos(){
 
-        return listaAlunos;
+        return ResponseEntity.ok(listaAlunos);
 
     }
     
     @PostMapping
-    public void inserir(@RequestBody Aluno aluno){
+    public ResponseEntity<Aluno> inserir(@RequestBody Aluno aluno){
 
         listaAlunos.add(aluno);
+        
+        return ResponseEntity.created(null).body(aluno);
         
     }
     
     @GetMapping("/{matricula}")
-    public Aluno obterAlunoPelaMatricula(@PathVariable int matricula){
+    public ResponseEntity<Aluno> obterAlunoPelaMatricula(@PathVariable int matricula){
 
         for (Aluno aluno : listaAlunos) {
             if(aluno.getMatricula() == matricula){
-                return aluno;
+                return ResponseEntity.ok().body(aluno);
             }
         }
 
-        return null;
+        return ResponseEntity.notFound().build();
     }
     
     @PutMapping("/{matricula}")
-    public void editarAluno(@PathVariable int matricula, @RequestBody Aluno novosDadosAluno){
+    public ResponseEntity<Aluno> editarAluno(@PathVariable int matricula, @RequestBody Aluno novosDadosAluno){
 
         for(Aluno aluno : listaAlunos){
             if(aluno.getMatricula() == matricula){
@@ -56,8 +60,11 @@ public class AlunoController {
                 aluno.setSobrenome(novosDadosAluno.getSobrenome());
                 aluno.setCpf(novosDadosAluno.getCpf());
                 aluno.setMatricula(novosDadosAluno.getMatricula());
+                
+                return ResponseEntity.ok().body(aluno);
             }
         }
+		return ResponseEntity.notFound().build();
     }
     
     @DeleteMapping("/{matricula}")
